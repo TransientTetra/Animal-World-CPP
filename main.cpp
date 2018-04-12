@@ -1,4 +1,6 @@
 #include <iostream>
+#include <chrono>
+#include <thread>
 
 #include "Organism.hpp"
 #include "World.hpp"
@@ -7,11 +9,15 @@
 
 int main (int argc, char *argv[])
 {
-	World world(20, 20);
-	struct Point position;
-	position.x = position.y = 0;
-	Sheep sheep(world, position);
+	int width = 2;
+	int height = 2;
 
-	sheep.foo();
+	World world(width, height);
+
+	while (1)
+	{
+		world.performTurn();
+		std::this_thread::sleep_for(std::chrono::milliseconds(200));
+	}
 	return 0;
 }

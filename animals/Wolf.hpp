@@ -1,14 +1,14 @@
-#ifndef SHEEP_H
-#define SHEEP_H
+#ifndef WOLF_H
+#define WOLF_H
 
 #include "../Animal.hpp"
 
-class Sheep : public Animal
+class Wolf : public Animal
 {
 private:
 
 public:
-	Sheep(World &world, struct Point position);
+	Wolf(World &world, struct Point position);
 
 	void action() override;
 	void collision(Organism &other) override;

@@ -11,7 +11,7 @@ public:
 	Plant(World &world, struct Point position, int power);
 
 	void action();
-	virtual void collision() = 0;
+	virtual void collision(Organism &other) = 0;
 	virtual void draw() = 0;
 };
 #endif
