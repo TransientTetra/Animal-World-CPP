@@ -6,6 +6,18 @@ Organism::Organism(World &world, struct Point position, int power, int initiativ
 
 }
 
+void Organism::wrapPosition(struct Point &position)
+{
+	if (position.x > world.getHeight() - 1)
+		position.x = 0;
+	if (position.y > world.getWidth() - 1)
+		position.y = 0;
+	if (position.x < 0)
+		position.x = world.getHeight() - 1;
+	if (position.y < 0)
+		position.y = world.getWidth() - 1;
+}
+
 struct Point Organism::getPosition()
 {
 	return position;

@@ -31,6 +31,6 @@ public:
 	void performTurn();
 	int getWidth();
 	int getHeight();
-	Organism *getOrganism(int x, int y);
+	Organism *getOrganism(struct Point position);
 };
 #endif
