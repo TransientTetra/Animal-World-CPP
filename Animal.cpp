@@ -4,6 +4,7 @@
 
 void Animal::action()
 {
+	getOlder();
 	std::random_device r;
 	std::mt19937 range(r());
 	std::uniform_int_distribution<int> uni(0, 3);
@@ -34,9 +35,10 @@ void Animal::action()
 
 	wrapPosition(destination);
 	if (world.getOrganism(destination) != nullptr)
-		collision(*world.getOrganism(destination));
+		world.getOrganism(destination)->collision(*this);
 	else
 		move(dx, dy);
+
 }
 
 void Animal::move(int dx, int dy)
@@ -47,16 +49,17 @@ void Animal::move(int dx, int dy)
 	wrapPosition(position);
 }
 
-void Animal::breed(Organism &other)
-{
-	
-}
-
 void Animal::collision(Organism &other)
 {
 	if (typeid(*this).hash_code() == typeid(other).hash_code())
 	{
+		if (this->getAge() > 18 && other.getAge() > 18)
+			if (!reproduce())
+				other.reproduce();
 	}
 	else
-		std::cerr << "inni" << std::endl;
+	{
+		fight(other);
+	}
+
 }

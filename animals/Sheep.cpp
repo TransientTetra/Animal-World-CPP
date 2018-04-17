@@ -3,17 +3,11 @@
 Sheep::Sheep(World &world, struct Point position)
 : Animal(world, position, 4, 4)
 {
-	
 }
 
-void Sheep::action()
+void Sheep::createNew(Organism **ptr, struct Point position)
 {
-	Animal::action();
-}
-
-void Sheep::collision(Organism &other)
-{
-	Animal::collision(other);
+	*ptr = new Sheep(world, position);
 }
 
 void Sheep::draw()

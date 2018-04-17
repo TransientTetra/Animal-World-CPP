@@ -15,16 +15,16 @@ struct Point
 class World
 {
 private:
-	Organism **organisms;
-	int **idArray;
 	int width;
 	int height;
+	int **idArray;
 
 	void drawWorld();
 	void drawInterface();
 	void fillIdArray();
 	void sortOrganisms();
 public:
+	Organism **organisms;
 	World(int width, int height);
 	~World();
 
@@ -32,5 +32,7 @@ public:
 	int getWidth();
 	int getHeight();
 	Organism *getOrganism(struct Point position);
+	Organism **getFree();
+	void removeOrganism(struct Point position);
 };
 #endif

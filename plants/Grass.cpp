@@ -6,14 +6,14 @@ Grass::Grass(World &world, struct Point position)
 
 }
 
-void Grass::action()
+void Grass::createNew(Organism **ptr, struct Point position)
 {
-
+	*ptr = new Grass(world, position);
 }
 
 void Grass::collision(Organism &other)
 {
-
+	Plant::collision(other);
 }
 
 void Grass::draw()

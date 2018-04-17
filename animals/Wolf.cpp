@@ -6,14 +6,9 @@ Wolf::Wolf(World &world, struct Point position)
 
 }
 
-void Wolf::action()
+void Wolf::createNew(Organism **ptr, struct Point position)
 {
-	Animal::action();
-}
-
-void Wolf::collision(Organism &other)
-{
-	Animal::collision(other);
+	*ptr = new Wolf(world, position);
 }
 
 void Wolf::draw()

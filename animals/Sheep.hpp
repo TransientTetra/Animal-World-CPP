@@ -6,12 +6,11 @@
 class Sheep : public Animal
 {
 private:
+	void createNew(Organism **ptr, struct Point position) override;
 
 public:
 	Sheep(World &world, struct Point position);
 
-	void action() override;
-	void collision(Organism &other) override;
 	void draw() override;
 };
 #endif

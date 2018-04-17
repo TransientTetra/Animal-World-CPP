@@ -14,14 +14,17 @@ World::World(int width, int height)
 	}
 
 	//tu losowanie init spawn
-	organisms[1] = new Sheep(*this, Point(0, 0));
-	organisms[2] = new Sheep(*this, Point(1, 1));
-	organisms[0] = new Sheep(*this, Point(0, 1));
+	//organisms[0] = new Sheep(*this, Point(0, 1));
+	organisms[1] = new Sheep(*this, Point(3, 1));
+	//organisms[2] = new Wolf(*this, Point(11, 11));
+	//organisms[3] = new Wolf(*this, Point(10, 10));
+	organisms[4] = new Grass(*this, Point(10, 15));
+
 
 	idArray = new int*[height];
 	for (int i = 0; i < height; ++i)
 		idArray[i] = new int[width];
-
+	fillIdArray();
 }
 
 World::~World()
@@ -50,6 +53,22 @@ Organism *World::getOrganism(struct Point position)
 	if (idArray[position.x][position.y] != -1)
 		return organisms[idArray[position.x][position.y]];
 	else return nullptr;
+}
+
+Organism **World::getFree()
+{
+	for (int i = 0; i < width * height; ++i)
+		if (organisms[i] == nullptr)
+			return &organisms[i];
+	return nullptr;
+}
+
+void World::removeOrganism(struct Point position)
+{
+	delete organisms[idArray[position.x][position.y]];
+	organisms[idArray[position.x][position.y]] = nullptr;
+	fillIdArray();
+	sortOrganisms();
 }
 
 void World::fillIdArray()
@@ -146,7 +165,6 @@ void World::performTurn()
 			fillIdArray();
 		}
 	}
-//	fillIdArray();
 
 	drawWorld();
 }

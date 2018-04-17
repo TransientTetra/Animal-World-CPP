@@ -6,11 +6,11 @@
 class Grass : public Plant
 {
 private:
+	void createNew(Organism **ptr, struct Point position) override;
 
 public:
 	Grass(World &world, struct Point position);
 
-	void action() override;
 	void collision(Organism &other) override;
 	void draw() override;
 };
