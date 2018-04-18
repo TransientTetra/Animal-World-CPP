@@ -18,5 +18,5 @@ void Grass::collision(Organism &other)
 
 void Grass::draw()
 {
-	std::cout << "\033[32mg\033[0m";
+	std::cout << "\033[32m\u2618\033[0m";
 }

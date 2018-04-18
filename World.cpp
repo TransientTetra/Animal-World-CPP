@@ -3,6 +3,7 @@
 #include "animals/Sheep.hpp"
 #include "animals/Wolf.hpp"
 #include "plants/Grass.hpp"
+#include "animals/Human.hpp"
 
 World::World(int width, int height)
 : width(width), height(height)
@@ -15,7 +16,7 @@ World::World(int width, int height)
 
 	//tu losowanie init spawn
 	//organisms[0] = new Sheep(*this, Point(0, 1));
-	organisms[1] = new Sheep(*this, Point(3, 1));
+	organisms[1] = new Human(*this, Point(3, 1));
 	//organisms[2] = new Wolf(*this, Point(11, 11));
 	//organisms[3] = new Wolf(*this, Point(10, 10));
 	organisms[4] = new Grass(*this, Point(10, 15));
