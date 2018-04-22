@@ -11,7 +11,6 @@ public:
 	using Organism::Organism;
 	
 	virtual void action() override;
-	virtual void move(int dx, int dy);
 	virtual void collision(Organism &other) override;
 };
 #endif

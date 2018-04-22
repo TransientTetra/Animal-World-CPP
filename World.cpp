@@ -1,9 +1,16 @@
 #include "World.hpp"
-#include "Organism.hpp"
 #include "animals/Sheep.hpp"
 #include "animals/Wolf.hpp"
-#include "plants/Grass.hpp"
 #include "animals/Human.hpp"
+#include "animals/Fox.hpp"
+#include "animals/Turtle.hpp"
+#include "animals/Antelope.hpp"
+#include "plants/Grass.hpp"
+#include "plants/Dandelion.hpp"
+#include "plants/Guarana.hpp"
+#include "plants/Belladonna.hpp"
+#include "plants/Hogweed.hpp"
+
 
 World::World(int width, int height)
 : width(width), height(height)
@@ -15,11 +22,20 @@ World::World(int width, int height)
 	}
 
 	//tu losowanie init spawn
-	//organisms[0] = new Sheep(*this, Point(0, 1));
-	organisms[1] = new Human(*this, Point(3, 1));
+	organisms[0] = new Sheep(*this, Point(0, 1));
+	organisms[1] = new Sheep(*this, Point(3, 1));
 	//organisms[2] = new Wolf(*this, Point(11, 11));
 	//organisms[3] = new Wolf(*this, Point(10, 10));
-	organisms[4] = new Grass(*this, Point(10, 15));
+//	organisms[4] = new Grass(*this, Point(10, 15));
+	//organisms[5] = new Dandelion(*this, Point(5, 20));
+	//organisms[6] = new Guarana(*this, Point(15, 5));
+//	organisms[7] = new Belladonna(*this, Point(5, 20));
+//	organisms[8] = new Hogweed(*this, Point(15, 20));
+//	organisms[9] = new Fox(*this, Point(2, 2));
+	//organisms[10] = new Fox(*this, Point(3, 3));
+	//organisms[11] = new Turtle(*this, Point(3, 3));
+	organisms[12] = new Antelope(*this, Point(4, 4));
+	//organisms[13] = new Antelope(*this, Point(5, 5));
 
 
 	idArray = new int*[height];
@@ -152,6 +168,12 @@ void World::sortOrganisms()
 			}
 		}
 	}
+}
+
+void World::update()
+{
+	sortOrganisms();
+	fillIdArray();
 }
 
 void World::performTurn()

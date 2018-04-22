@@ -29,6 +29,7 @@ public:
 	~World();
 
 	void performTurn();
+	void update();
 	int getWidth();
 	int getHeight();
 	Organism *getOrganism(struct Point position);

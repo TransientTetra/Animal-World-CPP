@@ -11,5 +11,5 @@ void Human::createNew(Organism **ptr, struct Point position)
 
 void Human::draw()
 {
-	std::cout << "\033[31m\u263a\033[0m";
+	std::cout << "\033[37;1m\u263a\033[0m";
 }

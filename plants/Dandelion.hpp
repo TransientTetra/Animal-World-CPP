@@ -1,16 +1,17 @@
-#ifndef GRASS_H
-#define GRASS_H
+#ifndef DANDELION_H
+#define DANDELION_H
 
 #include "../Plant.hpp"
 
-class Grass : public Plant
+class Dandelion : public Plant
 {
 private:
 	void createNew(Organism **ptr, struct Point position) override;
 
 public:
-	Grass(World &world, struct Point position);
+	Dandelion(World &world, struct Point position);
 
+	void action() override;
 	void draw() override;
 };
 

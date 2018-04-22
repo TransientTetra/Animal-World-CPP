@@ -13,10 +13,9 @@ void Plant::action()
 
 	std::random_device r;
 	std::mt19937 range(r());
-	std::uniform_int_distribution<int> uni(1, 100);
+	std::bernoulli_distribution chance(0.01);
 
-	int chance = uni(range);
-	if (age >= 10 && chance == 1)
+	if (age >= 10 && chance(r))
 		reproduce();
 }
 

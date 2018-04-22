@@ -27,12 +27,13 @@ void Organism::fight(Organism &other)
 bool Organism::reproduce()
 {
 	short int d[4][2] = {{1, 0}, {-1, 0}, {0, 1}, {0, -1}};
+	int order[4] = {1, 2, 3, 0};
 	std::random_device r;
 	std::mt19937 range(r());
-	std::shuffle(d[0], d[3], range);
+	std::shuffle(&order[0], &order[3], range);
 	for (int i = 0; i < 4; ++i)
 	{
-		struct Point temp(position.x + d[i][0], position.y + d[i][1]);
+		struct Point temp(position.x + d[order[i]][0], position.y + d[order[i]][1]);
 		wrapPosition(temp);
 
 		if (world.getOrganism(temp) == nullptr)
@@ -45,24 +46,59 @@ bool Organism::reproduce()
 	return false;
 }
 
+struct Point Organism::randomStep()
+{
+	std::random_device r;
+	std::mt19937 range(r());
+	std::uniform_int_distribution<int> uni(0, 3);
+
+	int randomDirection = uni(range);
+	struct Point destination(position.x, position.y);
+	int dx = 0;
+	int dy = 0;
+
+	switch (randomDirection)
+	{
+		case 0:
+			dx = 1;
+			break;
+		case 1:
+			dx = -1;
+			break;
+		case 2:
+			dy = 1;
+			break;
+		case 3:
+			dy = -1;
+			break;
+	}
+
+	destination.x += dx;
+	destination.y += dy;
+
+	wrapPosition(destination);
+
+	return destination;
+}
+
 void Organism::wrapPosition(struct Point &position)
 {
 	if (position.x > world.getHeight() - 1)
-		position.x = 0;
+		position.x -= world.getHeight();
 	if (position.y > world.getWidth() - 1)
-		position.y = 0;
+		position.y -= world.getWidth();
 	if (position.x < 0)
-		position.x = world.getHeight() - 1;
+		position.x += world.getHeight();
 	if (position.y < 0)
-		position.y = world.getWidth() - 1;
+		position.y += world.getWidth();
 }
 
-struct Point Organism::getPosition()
+struct Point &Organism::getPosition()
 {
 	return position;
 }
 
-int& Organism::getPower()
+int &Organism::getPower()
 {
 	return power;
 }
