@@ -1,22 +1,19 @@
-#include <iostream>
-#include <chrono>
-#include <thread>
-
-#include "Organism.hpp"
 #include "World.hpp"
-#include "Animal.hpp"
+#include <iostream>
 
 int main (int argc, char *argv[])
 {
-	int width = 15;
-	int height = 15;
+	int width = 0;
+	int height = 0;
+	system("clear");
+	std::cout << "Please give desired width of world:" << std::endl;
+	std::cin >> width;
+	std::cout << "Please give desired height of world:" << std::endl;
+	std::cin >> height;
 
 	World world(width, height);
 
-	while (1)
-	{
-		world.performTurn();
-		std::this_thread::sleep_for(std::chrono::milliseconds(200));
-	}
+	system("clear");
+	world.simulate();
 	return 0;
 }

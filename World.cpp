@@ -1,3 +1,6 @@
+#include <random>
+#include <typeinfo>
+#include <fstream>
 #include "World.hpp"
 #include "animals/Sheep.hpp"
 #include "animals/Wolf.hpp"
@@ -15,36 +18,31 @@
 World::World(int width, int height)
 : width(width), height(height)
 {
+	allocOrganisms();
+	randSpawn();
+
+	fillIdArray();
+}
+
+void World::allocOrganisms()
+{
 	organisms = new Organism*[width * height];
 	for (int i = 0; i < width * height; ++i)
 	{
 		organisms[i] = nullptr;
 	}
 
-	//tu losowanie init spawn
-	organisms[0] = new Sheep(*this, Point(0, 1));
-	organisms[1] = new Sheep(*this, Point(3, 1));
-	//organisms[2] = new Wolf(*this, Point(11, 11));
-	//organisms[3] = new Wolf(*this, Point(10, 10));
-//	organisms[4] = new Grass(*this, Point(10, 15));
-	//organisms[5] = new Dandelion(*this, Point(5, 20));
-	//organisms[6] = new Guarana(*this, Point(15, 5));
-//	organisms[7] = new Belladonna(*this, Point(5, 20));
-//	organisms[8] = new Hogweed(*this, Point(15, 20));
-//	organisms[9] = new Fox(*this, Point(2, 2));
-	//organisms[10] = new Fox(*this, Point(3, 3));
-	//organisms[11] = new Turtle(*this, Point(3, 3));
-	organisms[12] = new Antelope(*this, Point(4, 4));
-	//organisms[13] = new Antelope(*this, Point(5, 5));
-
-
 	idArray = new int*[height];
 	for (int i = 0; i < height; ++i)
 		idArray[i] = new int[width];
-	fillIdArray();
 }
 
 World::~World()
+{
+	deleteWorld();
+}
+
+void World::deleteWorld()
 {
 	for (int i = 0; i < width * height; ++i)
 		delete organisms[i];
@@ -53,6 +51,65 @@ World::~World()
 	for (int i = 0; i < height; ++i)
 		delete idArray[i];
 	delete[] idArray;
+}
+
+void World::randSpawn()
+{
+	int index = 0;
+	bool isHuman = false;
+	for (int i = 0; i < height; ++i)
+	{
+		for (int j = 0; j < width; ++j)
+		{
+			std::random_device r;
+			std::mt19937 range(r());
+			std::bernoulli_distribution chance(0.15);
+			if (chance(r))
+			{
+				std::uniform_int_distribution<int> uni(0, 9);
+				switch (uni(range))
+				{
+					case 0:
+						organisms[index] = new Grass(*this, Point(i, j));
+						break;
+					case 1:
+						organisms[index] = new Dandelion(*this, Point(i, j));
+						break;
+					case 2:
+						organisms[index] = new Guarana(*this, Point(i, j));
+						break;
+					case 3:
+						organisms[index] = new Belladonna(*this, Point(i, j));
+						break;
+					case 4:
+						organisms[index] = new Hogweed(*this, Point(i, j));
+						break;
+					case 5:
+						organisms[index] = new Wolf(*this, Point(i, j));
+						break;
+					case 6:
+						organisms[index] = new Sheep(*this, Point(i, j));
+						break;
+					case 7:
+						organisms[index] = new Fox(*this, Point(i, j));
+						break;
+					case 8:
+						organisms[index] = new Antelope(*this, Point(i, j));
+						break;
+					case 9:
+						organisms[index] = new Turtle(*this, Point(i, j));
+						break;
+				}
+				++index;
+			}
+			else if (!isHuman)
+			{
+				organisms[index] = new Human(*this, Point(i, j));
+				isHuman = true;
+				++index;
+			}
+		}
+	}
 }
 
 int World::getWidth()
@@ -103,11 +160,15 @@ void World::fillIdArray()
 	}
 }
 
-void World::drawWorld()
+void World::drawWorld(int turnNumber)
 {
 	fillIdArray();
 
+	std::cout << "\033[35m";
 	std::cout << "Mikołaj Sperkowski 171725" << std::endl;
+	std::cout << "\033[32m";
+	std::cout << "It is turn number " << turnNumber << std::endl;
+	std::cout << "\033[0m";
 
 	for (int i = 0; i < width + 2; ++i)
 		std::cout << '#';
@@ -176,18 +237,218 @@ void World::update()
 	fillIdArray();
 }
 
-void World::performTurn()
+char World::getInput()
 {
-	std::cout << std::endl;
-	sortOrganisms();
-	for (int i = 0; i < width * height; ++i)
+	system("stty raw");
+	char key = getchar();
+	if (key == '\033')
+	{
+		getchar();
+		key = getchar();
+	}
+	system("stty cooked");
+	switch(key)
+	{
+		case 'A':
+			return 'u';
+		case 'B':
+			return 'd';
+		case 'C':
+			return 'r';
+		case 'D':
+			return 'l';
+		case 'q':
+		case 'Q':
+			return 'q';
+		case 'p':
+		case 'P':
+			return 'p';
+		case 'S':
+		case 's':
+			return 's';
+		case 'L':
+		case 'l':
+			return 'f';
+		default:
+			return 'n';
+	}
+}
+
+void World::saveToFile()
+{
+	std::string filename;
+	std::cout << "What filename to save as?" << std::endl;
+	std::cin >> filename;
+	filename.append(".wsf");
+	filename.insert(0, "./saves/");
+
+	std::ofstream file(filename);
+
+	file << width << ' ' << height << ' ';
+	for (int i = 0; i < height * width; ++i)
 	{
 		if (organisms[i] != nullptr)
 		{
-			organisms[i]->action();
-			fillIdArray();
+			file << organisms[i]->getName() << ' ';
+			file << organisms[i]->getPosition().x << ' ' << organisms[i]->getPosition().y << ' ';
+			file << organisms[i]->getAge() << ' ' << organisms[i]->getPower() << ' ';
 		}
 	}
+	file << "END";
 
-	drawWorld();
+	file.close();
+}
+
+void World::loadFile()
+{
+	deleteWorld();
+	int width, height;
+	std::string filename;
+	std::cout << "What file to open?" << std::endl;
+	std::cin >> filename;
+	filename.append(".wsf");
+	filename.insert(0, "./saves/");
+
+	std::ifstream file(filename);
+
+	file >> width;
+	file >> height;
+
+	this->width = width;
+	this->height = height;
+	allocOrganisms();
+
+	int index = 0;
+	while (1)
+	{
+		std::string type;
+		int power, age, x, y;
+		file >> type;
+		if (type == "END") break;
+
+		file >> x;
+		file >> y;
+		struct Point position(x, y);
+		file >> power;
+		file >> age;
+
+		if (type == "Grass")
+		{
+			organisms[index] = new Grass(*this, position);
+		}
+		else if (type == "Dandelion")
+		{
+			organisms[index] = new Dandelion(*this, position);
+		}
+		else if (type == "Guarana")
+		{
+			organisms[index] = new Guarana(*this, position);
+		}
+		else if (type == "Belladonna")
+		{
+			organisms[index] = new Belladonna(*this, position);
+		}
+		else if (type == "Hogweed")
+		{
+			organisms[index] = new Hogweed(*this, position);
+		}
+		else if (type == "Wolf")
+		{
+			organisms[index] = new Wolf(*this, position);
+		}
+		else if (type == "Sheep")
+		{
+			organisms[index] = new Sheep(*this, position);
+		}
+		else if (type == "Fox")
+		{
+			organisms[index] = new Fox(*this, position);
+		}
+		else if (type == "Turtle")
+		{
+			organisms[index] = new Turtle(*this, position);
+		}
+		else if (type == "Antelope")
+		{
+			organisms[index] = new Antelope(*this, position);
+		}
+		else if (type == "Human")
+		{
+			organisms[index] = new Human(*this, position);
+		}
+		organisms[index]->getPower() = power;
+		organisms[index]->getAge() = age;
+	
+		++index;
+	}
+
+	file.close();
+	fillIdArray();
+}
+
+void World::simulate()
+{
+	getchar();
+	int turnNumber = 0;
+	int powerCounter = 0;
+	system("clear");
+	drawWorld(turnNumber);
+
+	while (1)
+	{
+		char input = getInput();
+		if (input == 'q')
+		{
+			system("clear");
+			return;
+		}
+		if (input == 's')
+		{
+			system("clear");
+			saveToFile();
+			break;
+		}
+		if (input == 'f')
+		{
+			system("clear");
+			loadFile();
+			turnNumber = 0;
+			powerCounter = 0;
+		}
+		if (input == 'p' && powerCounter > 0)
+			input = 'n';
+		if (input == 'p' && powerCounter == 0)
+		{
+			powerCounter = 11;
+		}
+		system("clear");
+		
+		sortOrganisms();
+		for (int i = 0; i < width * height; ++i)
+		{
+			if (organisms[i] != nullptr)
+			{
+				if (Human *v = dynamic_cast<Human*>(organisms[i]))
+				{
+					v->toDo(input);
+					if (powerCounter == 5)
+						v->getSuperpower() = false;
+
+				}
+				organisms[i]->action();
+				fillIdArray();
+			}
+		}
+		if (powerCounter > 0)
+			--powerCounter;
+		++turnNumber;
+
+		if (powerCounter > 5)
+			std::cout << powerCounter - 5 << " turns of invincibility remaining" << std::endl;
+		if (powerCounter > 0 && powerCounter <= 5)
+			std::cout << powerCounter << " turns until power can be used again" << std::endl;
+
+		drawWorld(turnNumber);
+	}
+	return;
 }

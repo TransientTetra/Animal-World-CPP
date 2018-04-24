@@ -3,6 +3,7 @@
 Sheep::Sheep(World &world, struct Point position)
 : Animal(world, position, 4, 4)
 {
+	species = "Sheep";
 }
 
 void Sheep::createNew(Organism **ptr, struct Point position)

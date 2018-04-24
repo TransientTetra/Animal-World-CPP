@@ -4,9 +4,7 @@
 
 Organism::Organism(World &world, struct Point position, int power, int initiative)
 : world(world), position(position), power(power), initiative(initiative), age(0)
-{
-
-}
+{}
 
 void Organism::die()
 {
@@ -18,10 +16,23 @@ void Organism::getOlder()
 
 void Organism::fight(Organism &other)
 {
+	std::cout << "\033[31m";
+	name();
+	std::cout << " has been attacked by a ";
+	other.name();
+	std::cout << "." << std::endl;
 	if (power > other.getPower())
+	{
+		name();
 		other.die();
+	}
 	else
+	{
+		other.name();
 		die();
+	}
+	std::cout << " has won!" << std::endl;
+	std::cout << "\033[0m";
 }
 
 bool Organism::reproduce()
@@ -38,6 +49,10 @@ bool Organism::reproduce()
 
 		if (world.getOrganism(temp) == nullptr)
 		{
+			std::cout << "\033[36;1m";
+			name();
+			std::cout << " has reproduced!" << std::endl;
+			std::cout << "\033[0m";
 			createNew(world.getFree(), temp);
 			return true;
 		}
@@ -98,12 +113,17 @@ struct Point &Organism::getPosition()
 	return position;
 }
 
+std::string Organism::getName()
+{
+	return species;
+}
+
 int &Organism::getPower()
 {
 	return power;
 }
 
-int Organism::getAge()
+int &Organism::getAge()
 {
 	return age;
 }
@@ -111,4 +131,9 @@ int Organism::getAge()
 int Organism::getInitiative()
 {
 	return initiative;
+}
+
+void Organism::name()
+{
+	std::cout << species;
 }

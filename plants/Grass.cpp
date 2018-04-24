@@ -3,7 +3,7 @@
 Grass::Grass(World &world, struct Point position)
 : Plant(world, position, 0)
 {
-
+	species = "Grass";
 }
 
 void Grass::createNew(Organism **ptr, struct Point position)

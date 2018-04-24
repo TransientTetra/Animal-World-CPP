@@ -3,7 +3,9 @@
 
 Hogweed::Hogweed(World &world, struct Point position)
 : Plant(world, position, 10)
-{}
+{
+	species = "Hogweed";
+}
 
 void Hogweed::createNew(Organism **ptr, struct Point position)
 {
@@ -32,7 +34,13 @@ void Hogweed::action()
 		if (world.getOrganism(temp) != nullptr)
 		{
 			if(Animal *v = dynamic_cast<Animal*>(world.getOrganism(temp)))
+			{
+				std::cout << "\033[34m";
+				v->name();
+				std::cout << " has been burned by hogweed!" << std::endl;
+				std::cout << "\033[0m";
 				v->die();
+			}
 			world.update();
 		}
 	}

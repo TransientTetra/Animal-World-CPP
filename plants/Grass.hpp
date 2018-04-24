@@ -13,5 +13,4 @@ public:
 
 	void draw() override;
 };
-
 #endif

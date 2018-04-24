@@ -3,7 +3,9 @@
 
 Turtle::Turtle(World &world, struct Point position)
 : Animal(world, position, 2, 1)
-{}
+{
+	species = "Turtle";
+}
 
 void Turtle::createNew(Organism **ptr, struct Point position)
 {

@@ -12,6 +12,7 @@ public:
 
 	void action();
 	virtual void collision(Organism &other) override;
+	virtual void fight(Organism &other) override;
 	virtual void draw() = 0;
 };
 #endif

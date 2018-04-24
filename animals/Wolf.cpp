@@ -3,7 +3,7 @@
 Wolf::Wolf(World &world, struct Point position)
 : Animal(world, position, 9, 5)
 {
-
+	species = "Wolf";
 }
 
 void Wolf::createNew(Organism **ptr, struct Point position)

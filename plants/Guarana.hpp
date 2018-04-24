@@ -14,5 +14,4 @@ public:
 	void draw() override;
 	void fight(Organism &other) override;
 };
-
 #endif

@@ -2,7 +2,9 @@
 
 Dandelion::Dandelion(World &world, struct Point position)
 : Plant(world, position, 0)
-{}
+{
+	species = "Dandelion";
+}
 
 void Dandelion::createNew(Organism **ptr, struct Point position)
 {

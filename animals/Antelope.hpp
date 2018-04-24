@@ -11,7 +11,6 @@ private:
 public:
 	Antelope(World &world, struct Point position);
 
-	bool escape();
 	void draw() override;
 	void action() override;
 	void fight(Organism &other) override;

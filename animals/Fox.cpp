@@ -3,7 +3,9 @@
 
 Fox::Fox(World &world, struct Point position)
 : Animal(world, position, 3, 7)
-{}
+{
+	species = "Fox";
+}
 
 void Fox::createNew(Organism **ptr, struct Point position)
 {

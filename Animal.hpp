@@ -6,7 +6,7 @@
 class Animal : public Organism
 {
 protected:
-
+	virtual bool escape();
 public:
 	using Organism::Organism;
 	

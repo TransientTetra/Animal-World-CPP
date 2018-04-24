@@ -7,6 +7,7 @@
 class Organism
 {
 protected:
+	std::string species;
 	int power;
 	int age;
 	int initiative;
@@ -22,8 +23,9 @@ public:
 
 	virtual struct Point &getPosition();
 	virtual int getInitiative();
-	virtual int getAge();
+	virtual int &getAge();
 	virtual int &getPower();
+	virtual std::string getName();
 
 	virtual void action() = 0;
 	virtual struct Point randomStep();
@@ -32,6 +34,7 @@ public:
 	virtual bool reproduce();
 	virtual void die();
 	virtual void draw() = 0;
+	virtual void name();
 };
 
 #endif

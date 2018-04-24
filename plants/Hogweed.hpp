@@ -15,5 +15,4 @@ public:
 	void action() override;
 	void draw() override;
 };
-
 #endif
