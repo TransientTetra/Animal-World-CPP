@@ -269,8 +269,11 @@ char World::getInput()
 		case 'L':
 		case 'l':
 			return 'f';
-		default:
+		case 'N':
+		case 'n':
 			return 'n';
+		default:
+			return 'i';
 	}
 }
 
@@ -397,6 +400,8 @@ void World::simulate()
 	while (1)
 	{
 		char input = getInput();
+		if (input == 'i')
+			continue;
 		if (input == 'q')
 		{
 			system("clear");
@@ -406,7 +411,9 @@ void World::simulate()
 		{
 			system("clear");
 			saveToFile();
-			break;
+			system("clear");
+			drawWorld(turnNumber);
+			continue;
 		}
 		if (input == 'f')
 		{
@@ -414,6 +421,9 @@ void World::simulate()
 			loadFile();
 			turnNumber = 0;
 			powerCounter = 0;
+			system("clear");
+			drawWorld(turnNumber);
+			continue;
 		}
 		if (input == 'p' && powerCounter > 0)
 			input = 'n';

@@ -1,5 +1,6 @@
 #include "Turtle.hpp"
 #include <random>
+#include <typeinfo>
 
 Turtle::Turtle(World &world, struct Point position)
 : Animal(world, position, 2, 1)
